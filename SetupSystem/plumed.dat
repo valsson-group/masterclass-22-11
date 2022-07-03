@@ -1,0 +1,11 @@
+ene: ENERGY
+vol: VOLUME
+box: CELL
+dist: DISTANCE ATOMS=322,323
+UPPER_WALLS ...
+   ARG=dist
+   AT=0.7
+   KAPPA=4000.0
+   LABEL=uwall
+... UPPER_WALLS
+PRINT ARG=ene,dist,vol,box.ax,uwall.* FILE=colvar.data STRIDE=125

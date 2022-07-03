@@ -1,0 +1,8 @@
+integrator = steep 
+nsteps = 10000
+cutoff-scheme = Verlet
+coulombtype = PME
+rlist = 0.7
+rcoulomb = 0.7 
+rvdw = 0.7
+constraints = h-bonds
