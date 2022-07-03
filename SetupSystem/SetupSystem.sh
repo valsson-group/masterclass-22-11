@@ -1,5 +1,5 @@
 BoxSize=1.5
-CutOff=0.7
+CutOff=0.6
 GMX_BIN=gmx_mpi
 
 
@@ -78,7 +78,7 @@ box: CELL
 dist: DISTANCE ATOMS=${NumAtom_NA},${NumAtom_CL}
 UPPER_WALLS ...
    ARG=dist
-   AT=0.7
+   AT=0.6
    KAPPA=4000.0
    LABEL=uwall
 ... UPPER_WALLS

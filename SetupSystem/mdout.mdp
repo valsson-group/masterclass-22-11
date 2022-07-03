@@ -2,7 +2,7 @@
 ;	File 'mdout.mdp' was generated
 ;	By user: valsson (501)
 ;	On host: Omars-MacBook-Pro.local
-;	At date: Sun Jul  3 16:20:55 2022
+;	At date: Sun Jul  3 16:45:00 2022
 ;
 ;	Created by:
 ;	              :-) GROMACS - gmx grompp, 2020.6-plumed-2.8.0 (-:
@@ -88,7 +88,7 @@ periodic-molecules       = no
 ; a value of -1 means: use rlist
 verlet-buffer-tolerance  = 0.005
 ; nblist cut-off        
-rlist                    = 0.7
+rlist                    = 0.6
 ; long-range cut-off for switched potentials
 
 ; OPTIONS FOR ELECTROSTATICS AND VDW
@@ -96,7 +96,7 @@ rlist                    = 0.7
 coulombtype              = PME
 coulomb-modifier         = Potential-shift-Verlet
 rcoulomb-switch          = 0
-rcoulomb                 = 0.7
+rcoulomb                 = 0.6
 ; Relative dielectric constant for the medium and the reaction field
 epsilon-r                = 1
 epsilon-rf               = 0
@@ -105,7 +105,7 @@ vdw-type                 = Cut-off
 vdw-modifier             = Potential-shift-Verlet
 ; cut-off lengths       
 rvdw-switch              = 0
-rvdw                     = 0.7
+rvdw                     = 0.6
 ; Apply long range dispersion corrections for Energy and Pressure
 DispCorr                 = AllEnerPres
 ; Extension of the potential lookup tables beyond the cut-off

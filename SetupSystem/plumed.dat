@@ -4,7 +4,7 @@ box: CELL
 dist: DISTANCE ATOMS=322,323
 UPPER_WALLS ...
    ARG=dist
-   AT=0.7
+   AT=0.6
    KAPPA=4000.0
    LABEL=uwall
 ... UPPER_WALLS

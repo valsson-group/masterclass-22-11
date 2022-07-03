@@ -1,4 +1,4 @@
 ; ions.mdp - used as input into grompp to generate ions.tpr
-rlist = 0.7
-rcoulomb = 0.7 
-rvdw = 0.7
+rlist = 0.6
+rcoulomb = 0.6 
+rvdw = 0.6
