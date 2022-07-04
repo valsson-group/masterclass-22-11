@@ -1,7 +1,7 @@
 # PLUMED Masterclass-22-11
 Simulation files for PLUMED [Masterclass](https://www.plumed.org/masterclass)-22-11 on how to run variationally enhanced sampling simulations with PLUMED.
 
-The slides from the lecture on July 4, 2022 can be found [here](https://github.com/valsson-group/masterclass-22-11/blob/main/Slides/PLUMED-Masterclass-22-11-July4-2022.pdf)
+The slides from the lecture on July 4, 2022 can be found [here](https://github.com/valsson-group/masterclass-22-11/blob/main/Slides/PLUMED-Masterclass-22-11-July4-2022.pdf).
 
 The tutorial can be found [here](https://www.plumed.org/doc-master/user-doc/html/masterclass-22-11.html). 
 
