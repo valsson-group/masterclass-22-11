@@ -9,9 +9,9 @@ The tutorial can be found [here](https://www.plumed.org/doc-master/user-doc/html
 
 The video from the solutions on July 11, 2022 can be found [here](https://youtu.be/rVFEF4YNLnk).
 
-The jupyter notebook used during the solutions on July 11, 2022 can be found [here](https://github.com/valsson-group/masterclass-22-11/blob/main/Solution/Analysis_Solutions-July11-2022.ipynb)
+The jupyter notebook used during the solutions on July 11, 2022 can be found [here](https://github.com/valsson-group/masterclass-22-11/blob/main/Solutions/Analysis_Solutions-July11-2022.ipynb)
 
-The [Solutions](https://github.com/valsson-group/masterclass-22-11/tree/main/Solution) folder includes the runs analyzed during the the solutions on July 11, 2022. 
+The [Solutions](https://github.com/valsson-group/masterclass-22-11/tree/main/Solutions) folder includes the runs analyzed during the the solutions on July 11, 2022. 
 
 For this tutorial you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. 
 All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. In order to obtain the these versions, 
