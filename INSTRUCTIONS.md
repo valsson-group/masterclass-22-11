@@ -217,6 +217,7 @@ chosen a stride of 500 steps (i.e., 1 ps) and a step size of 5.0 kJ/mol.
 We also need to choose how often we update the target distribution (given by the
 keyword `TARGETDIST_STRIDE`) and we do this every 100 bias potential updates
 (i.e., every 100 ps in the current case).
+
 ```plumed
 OPT_AVERAGED_SGD ...
   LABEL=opt
@@ -275,7 +276,7 @@ coefficient 3:
 This will create a file with the first column the iteration number, the second
 column the averaged coefficient $\bar{\boldsymbol\alpha}$, and the third column
 the instantaneous coefficients $\boldsymbol\alpha$. You should create files for
-different coefficient and visualize both the second and third column to understand
+different coefficient and visualize both the second and third columns to understand
 how the coefficients converge.
 
 ## Exercise 2: Reweighting a VES simulation
@@ -327,8 +328,17 @@ to the results obtained directly from the bias potential in Exercise 1.
 We can also obtain the FES for CVs that are not biased in the VES simulation.
 For example, we can obtain the two-dimensional FES for the distance and the
 solvation CV given by the coordination number CV. For this, you will need to
-add the following to the plumed_reweight.dat file and repeat the PLUEMD driver run
+add the following to the plumed_reweight.dat file and repeat the PLUMED driver run
+
 ```plumed
+#HIDDEN
+dist:   READ FILE=colvar_reweight.data IGNORE_TIME VALUES=dist
+coord:  READ FILE=colvar_reweight.data IGNORE_TIME VALUES=coord
+ves:    READ FILE=colvar_reweight.data IGNORE_TIME VALUES=ves.bias
+
+weights: REWEIGHT_BIAS TEMP=300 ARG=ves.bias
+#ENDHIDDEN
+
 HISTOGRAM ...
   ARG=dist,coord
   GRID_MIN=0.2,2.5
