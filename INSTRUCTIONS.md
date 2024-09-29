@@ -162,9 +162,9 @@ Every VES simulation has three key ingredients
 - Target distribution
 - Optimization algorithm
 
-For the basis set, we will use the recently introduced [wavelet-based basis set](https://doi.org/10.1021/acs.jctc.2c00197) that are localized basis functions that have been shown to perform better than the previously used Chebyshev or Legendre polynomials. We will employ the least asymmetric variant of these wavelets or so-called symlets (as indicated by the TYPE=SYMLETS keyword). We will use an order 10 of the symlets or Sym10 (as indicated by the ORDER=10 keyword). Furthermore information about the wavelets can be found in the reference above.
+For the basis set, we will use the recently introduced [wavelet-based basis set](https://doi.org/10.1021/acs.jctc.2c00197) that are localized basis functions that have been shown to perform better than the previously used Chebyshev or Legendre polynomials. We will employ the least asymmetric variant of these wavelets or so-called symlets (as indicated by the `TYPE=SYMLETS` keyword). We will use an order 10 of the symlets or Sym10 (as indicated by the `ORDER=10` keyword). Furthermore information about the wavelets can be found in the reference above.
 
-We need to select the range on which the bias potential is expanded. Here we will use the range from 0.2 nm to 0.7 nm (as indicated by the MINIMUM and MAXIMUM keywords). We also need to select the number of basis functions, and here we will use 26 basis functions (as indicated by the NUM_BF keyword). The PLUMED action corresponding to this setup is given by
+We need to select the range on which the bias potential is expanded. Here we will use the range from 0.2 nm to 0.7 nm (as indicated by the `MINIMUM=0.2` and `MAXIMUM=0.7` keywords). We also need to select the number of basis functions, and here we will use 26 basis functions (as indicated by the `NUM_BF=26` keyword). The PLUMED action corresponding to this setup is given by
 ```plumed
 # Basisset for Na-Cl distance
 BF_WAVELETS ...
@@ -185,7 +185,7 @@ of 10.
 td: TD_WELLTEMPERED BIASFACTOR=10
 ```
 
-Then we define the VES bias potential using the \ref VES_LINEAR_EXPANSION action
+Then we define the VES bias potential using the `VES_LINEAR_EXPANSION` action
 ```plumed
 VES_LINEAR_EXPANSION ...
   LABEL=ves
@@ -198,11 +198,11 @@ VES_LINEAR_EXPANSION ...
 ... VES_LINEAR_EXPANSION
 ```
 
-Finally, we need to define the optimization algorithm. The standard is the averaged stochastic gradient descent (\ref OPT_AVERAGED_SGD).
+Finally, we need to define the optimization algorithm. The standard is the averaged stochastic gradient descent (`OPT_AVERAGED_SGD`).
 We need to define two parameters: the stride and the step size.
-The stride (given by the keyword STRIDE) is the number of MD steps in which samples
-are collected to calculate the gradient and hessian of $ \Omega [V] $. The
-step size (given by the keyword STEPSIZE) is the step by which the coefficients
+The stride (given by the keyword `STRIDE`) is the number of MD steps in which samples
+are collected to calculate the gradient and hessian of $\Omega [V]$. The
+step size (given by the keyword `STEPSIZE`) is the step by which the coefficients
 are evolved at every optimization steps, given by $\mu$ in the equation above.
 It has become
 traditional to choose a stride of around 500-2000 MD steps. It must be noted that we
@@ -213,7 +213,7 @@ the system. The larger the barriers, the larger the step size needed such that
 the bias can grow fast enough to overcome them. For this example we have
 chosen a stride of 500 steps (i.e., 1 ps) and a step size of 5.0 kJ/mol.
 We also need to choose how often we update the target distribution (given by the
-keyword TARGETDIST_STRIDE) and we do this every 100 bias potential updates
+keyword `TARGETDIST_STRIDE`) and we do this every 100 bias potential updates
 (i.e., every 100 ps in the current case).
 ```plumed
 OPT_AVERAGED_SGD ...
@@ -230,69 +230,69 @@ OPT_AVERAGED_SGD ...
 ```
 The other parameters are related to the outputting frequency of various output files.
 
-Finally, we need to define the \ref PRINT action to output all the variables
+Finally, we need to define the `PRINT` action to output all the variables
 ```plumed
 PRINT ARG=dist,coord,ves.*,uwall.* FILE=colvar.data STRIDE=125
 ```
 
 The full PLUMED input file can be found in the Exercise-1 folder. There you also find all
 the relevant GROMACS input file. First, you need to run the
-generate-tpr-file.sh script that generates the GROMACS TPR file using the parameters defined in MD-NPT.mdp
-and the initial geometry defined using the StartingGeometry variable. You can then run the simulation using
-the run.sh script
+`generate-tpr-file.sh` script that generates the GROMACS TPR file using the parameters defined in `MD-NPT.mdp` mdp file 
+and the initial geometry defined using the `StartingGeometry` variable. You can then run the simulation using
+the `run.sh` script
 ```
 ./generate-tpr-file.sh
 ./run.sh
 ```
-The run might take around 15-20 minutes to run using two MPI processes. You can adjust the number of MIP processes used for the simulation using the NumProcs variable in the run.sh script.
+The run might take around 15-20 minutes to run using two MPI processes. You can adjust the number of MPI processes used for the simulation using the `NumProcs` variable in the `run.sh` script.
 
 At the end of simulation, you will get several files:
-- colvar.data: Colvar file
-- coeffs.data : Values of the coefficients $\boldsymbol\alpha $ and $\bar{\boldsymbol\alpha} $ at different iterations.
-- bias.<bias-label>.iter-<iteration-number>.data : Bias potential at iteration <iteration-number>.
-- fes.<bias-name>.iter-<iteration-number>.data : FES at iteration <iteration-number>.
-- targetdistribution.<bias-name>.iter-<iteration-number>.data : Target distribution at iteration <iteration-number>.
+- `colvar.data`: Colvar file
+- `coeffs.data` : Values of the coefficients $\boldsymbol\alpha$ and $\bar{\boldsymbol\alpha}$ at different iterations.
+- `bias.<bias-label>.iter-<iteration-number>.data` : Bias potential at iteration <iteration-number>.
+- `fes.<bias-name>.iter-<iteration-number>.data` : FES at iteration <iteration-number>.
+- `targetdistribution.<bias-name>.iter-<iteration-number>.data` : Target distribution at iteration <iteration-number>.
 
 To assess the simulation and its convergence, you should first look at the time evolution of the
 biased CV and check that it is diffusive in CV space. Second, you should look at how the free energy surfaces behave as
-a function of time by looking at the fes.<bias-name>.iter-<iteration-number>.data files at different number of iterations (the minimum of the FES is always align to zero
+a function of time by looking at the `fes.<bias-name>.iter-<iteration-number>.data` files at different number of iterations (the minimum of the FES is always align to zero
 to facilitate comparison). To do this, you need to use your favorite way to plot datafiles (e.g., Matplotlib or Gnuplot).
 
 You can also visualize the trajectory by opening it with VMD by using the command
 ```
 vmd NaCl_StartingStructure-1.gro NaCl_VES_NPT-300K.pbc-whole.xtc
 ```
-The NaCl_VES_NPT-300K.pbc-whole.xtc is the trajectory file with the periodic boundary conditions made whole. This is done with the run.sh script.
+The `NaCl_VES_NPT-300K.pbc-whole.xtc` is the trajectory file with the periodic boundary conditions made whole. This is done within the `run.sh` script.
 
-The coeffs.data file includes the values of coefficients $\boldsymbol\alpha $ and $\bar{\boldsymbol\alpha} $ at different iterations. To extract the time evolution of
-a given coefficient, you can use the ExtractCoeff.sh script, for example to extract
+The `coeffs.data` file includes the values of coefficients $\boldsymbol\alpha$ and $\bar{\boldsymbol\alpha}$ at different iterations. To extract the time evolution of
+a given coefficient, you can use the `ExtractCoeff.sh` script, for example to extract
 coefficient 3:
 ```
 ./ExtractCoeff.sh 3 > coeff.3.data
 ```
 This will create a file with the first column the iteration number, the second
-column the averaged coefficient $\bar{\boldsymbol\alpha} $, and the third column
-the instantaneous coefficients $\boldsymbol\alpha $. You should create files for
+column the averaged coefficient $\bar{\boldsymbol\alpha}$, and the third column
+the instantaneous coefficients $\boldsymbol\alpha$. You should create files for
 different coefficient and visualize both the second and third column to understand
 how the coefficients converge.
 
 ## Exercise 2: Reweighting a VES simulation
 Apart from estimating the FES directly from the bias potential, you can also estimate
 the FES through reweighting by histogramming where each configuration is weighted by the
-bias acting on it, $ e^{\beta V(\mathbf{s})} $. The VES bias acting at each time step
-is given by the ves.bias variable in the colvar.dat file.
+bias acting on it, $e^{\beta V(\mathbf{s})}$. The VES bias acting at each time step
+is given by the `ves.bias` variable in the `colvar.dat` file.
 
 When doing performing reweighting, it is better to ignore the initial part of
 the simulation where the bias potential is changing more rapidly. You can use the
-trim-colvar-file.py python script in the Exercise-2 folder to do this
+`trim-colvar-file.py` python script in the Exercise-2 folder to do this
 ```
 ./trim-colvar-file.py --colvar-file ../Exercise-1/colvar.data --output-file colvar_reweight.data --time-min 400
 ```
-where here we ignore the first 400 ps of the colvar.data file from the Exercise-1 and create
-a new file called colvar_reweight.data.
+where here we ignore the first 400 ps of the `colvar.data` file from the Exercise 1 and create
+a new file called `colvar_reweight.data`.
 
 We can then perform the reweighting for the distance using the following PLUMED input
-(plumed_reweight.dat in the Exercise-2 folder)
+(`plumed_reweight.dat` in the `Exercise-2` folder)
 ```plumed
 dist:   READ FILE=colvar_reweight.data IGNORE_TIME VALUES=dist
 coord:  READ FILE=colvar_reweight.data IGNORE_TIME VALUES=coord
@@ -319,7 +319,7 @@ You can run this input by using the PLUMED driver
 plumed driver --plumed plumed_reweight.dat --noatoms
 ```
 
-You should compare the resulting FES (the fes-reweight.dist.data file)
+You should compare the resulting FES (the `fes-reweight.dist.data` file)
 to the results obtained directly from the bias potential in Exercise 1.
 
 We can also obtain the FES for CVs that are not biased in the VES simulation.
@@ -351,7 +351,7 @@ This will generate a two-dimensional FES that you can visualize.
 
 To check the results, it is a good practice to run another independent simulation
 using different initial conditions. You can achieve this here by changing the initial
-geometry in the generate-tpr-file.sh script
+geometry in the `generate-tpr-file.sh` script
 ```
 StartingGeometry=NaCl_StartingStructure-2.gro
 ```
@@ -378,8 +378,8 @@ BF_WAVELETS ...
 ... BF_WAVELETS
 ```
 
-We also need to change the relevant keywords in the \ref VES_LINEAR_EXPANSION action,
-namely the ARG, BASIS_FUNCTIONS, and GRID_BINS keywords
+We also need to change the relevant keywords in the `VES_LINEAR_EXPANSION` action,
+namely the `ARG`, `BASIS_FUNCTIONS`, and `GRID_BINS` keywords
 ```plumed
 VES_LINEAR_EXPANSION ...
   LABEL=ves
@@ -395,11 +395,11 @@ VES_LINEAR_EXPANSION ...
 ```
 Additionally, we have turned on the calculation of the one-dimensional projection
 of the FES on the two CVs (we also need to set the keyword
-FES_PROJ_OUTPUT=100 in \ref OPT_AVERAGED_SGD). This is useful to assess the
+`FES_PROJ_OUTPUT=100` in `OPT_AVERAGED_SGD`). This is useful to assess the
 convergence as this is
 easier in one-dimension. We can also compare the projection to the results from
 Exercise 1. These changes should be sufficient to do the simulations using two CVs.
-You can see full input file in the Exercise-4 folder.
+You can see full input file in the `Exercise-4` folder.
 
 Once you have performed this simulation, you should also try to reweight from
 this simulations. Furthermore, if you have time, you should also try to perform
@@ -437,7 +437,7 @@ and remove the TARGETDIST_STRIDE and TARGETDIST_OUTPUT keywords from the \ref OP
 action.
 
 ### Legendre polynomials basis function 
-Perform a simulation using Legendre polynomials (\ref BF_LEGENDRE) basis functions instead of the
+Perform a simulation using Legendre polynomials (`BF_LEGENDRE`) basis functions instead of the
 wavelets and see how this will affect the result. As the Legendre polynomials are delocalized
 basis functions, this should lead to more fluctuations in the bias potential as has been observed
 in the [paper introducing the wavelets](https://doi.org/10.1021/acs.jctc.2c00197).
@@ -461,12 +461,12 @@ comments might be of interest to some.
 ### Restarting
 VES simulations can be easily restarted. The code will automatically output
 all the file needed at the end of the simulation. To restart, you just need to
-reset the simulation with your MD code in the traditional way and add a \ref RESET
+reset the simulation with your MD code in the traditional way and add a `RESET`
 keyword to the top of the PLUMED input (for some codes like GROMACS, a restart is
 automatically detected by PLUMED and thus this keyword is not needed).
 
 ### Multiple Walkers
 
-VES simulations supports the usage of multiple walkers where different copies of the system share the same bias potential (i.e. coefficients) and cooperatively sample the averages needed for the gradient and Hessian. This can significantly help with convergence in difficult cases. It is of course best to start the different copies from different positions in CV space. To activate this option you just need to add the MULTIPLE_WALKERS keyword to the \ref OPT_AVERAGED_SGD action. Note that this is only supported if the MD code support running multiple replicas connected via MPI (e.g., GROMACS or LAMMPS).
+VES simulations supports the usage of multiple walkers where different copies of the system share the same bias potential (i.e. coefficients) and cooperatively sample the averages needed for the gradient and Hessian. This can significantly help with convergence in difficult cases. It is of course best to start the different copies from different positions in CV space. To activate this option you just need to add the `MULTIPLE_WALKERS` keyword to the `OPT_AVERAGED_SGD` action. Note that this is only supported if the MD code support running multiple replicas connected via MPI (e.g., GROMACS or LAMMPS).
 
 
