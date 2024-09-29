@@ -1,51 +1,48 @@
-/**
-\page masterclass-22-11 PLUMED Masterclass 22.11: Variationally enhanced sampling with PLUMED
+# PLUMED Masterclass 22.11: Variationally Enhanced Sampling
 
-\authors Omar Valsson
-\date July 4, 2022
+## Author
+Omar Valsson, Department of Chemistry, University of North Texas   
+Webpage: www.valsson.info  
+July 4, 2022
 
-\section masterclass-22-11-aims Aims
+## Aims
 
 In this Masterclass, we will discuss how to run variationally enhanced sampling simulations with PLUMED. We will also understand how to analyze the results.
 
-\section masterclass-22-11-lo Objectives
+## Objectives
 
 Once you have completed this Masterclass you will be able to:
 
 - Run variationally enhanced sampling simulations biasing one and two CVs
 - Assess the convergence of the simulation
-- Perform reweighting from a variationally enhanced sampling simulations
+- Perform reweighting from variationally enhanced sampling simulations
 
-Use PLUMED to run and analyze
-
-- Use PLUMED to reweight from
-
-\section masterclass-22-11-install Setting up PLUMED
+## Setting up PLUMED
 
 For this masterclass you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. In order to obtain the correct versions, please follow the instructions at [this link](https://github.com/plumed/masterclass-2022).
 
 The data needed to execute the exercises of this Masterclass can be found on [GitHub](https://github.com/valsson-group/masterclass-22-11).
 You can clone this repository locally on your machine using the following command:
 
-\verbatim
+```
 git clone https://github.com/valsson-group/masterclass-22-11.git
-\endverbatim
+```
 
-\section masterclass-22-11-theory Summary of theory
+## Summary of Theory
 
-Here, we will briefly summarize the theory behind variationally enhanced sampling (VES). For an full overview of VES, you should read the [original paper](https://doi.org/10.1103/PhysRevLett.113.090601), a recent review [book chapter on VES](https://doi.org/10.1007/978-3-319-44677-6_50), or a recent [enhanced sampling review](https://arxiv.org/abs/2202.04164) that includes discussion about VES.
+Here, we will briefly summarize the theory behind variationally enhanced sampling (VES). For an full overview of VES, you should read the [original paper](https://doi.org/10.1103/PhysRevLett.113.090601), a recent review [book chapter on VES](https://doi.org/10.1007/978-3-319-44677-6_50), or a recent [enhanced sampling review](https://doi.org/10.33011/livecoms.4.1.1583) that includes discussion about VES.
 
 VES is based on the the following functional of the bias potential:
-\f[
-\Omega [V]  =
+
+$$\Omega [V]  =
 \frac{1}{\beta} \log
 \frac
-{\int d\mathbf{s} \, e^{-\beta \left[ F(\mathbf{s}) + V(\mathbf{s})\right]}}
-{\int d\mathbf{s} \, e^{-\beta F(\mathbf{s})}}
+{\int d\mathbf{s} \ e^{-\beta \left[ F(\mathbf{s}) + V(\mathbf{s})\right]}}
+{\int d\mathbf{s} \ e^{-\beta F(\mathbf{s})}}
 +
-\int d\mathbf{s} \, p_{\mathrm{tg}}(\mathbf{s}) V(\mathbf{s}),
-\f]
-where \f$\mathbf{s}\f$ are the CVs that we are biasing,
+\int d\mathbf{s} \ p_{\mathrm{tg}}(\mathbf{s}) \, V(\mathbf{s}),$$
+
+where $\mathbf{s}$ are the CVs that we are biasing,
 \f$ p_{\mathrm{tg}}(\mathbf{s}) \f$ is a predefined probability distribution that we will refer
 to as the target distribution, and \f$ F(\mathbf{s}) \f$ is the free energy
 surface. This functional can be shown to be convex and to have a minimum at:
