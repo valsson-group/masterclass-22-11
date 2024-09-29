@@ -20,7 +20,7 @@ Once you have completed this Masterclass you will be able to:
 
 ## Setting up PLUMED
 
-For this masterclass you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. For example, to obtain these version, you can follow the instructions at [this link](https://github.com/plumed/masterclass-2022).
+For this masterclass you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. For example, to obtain these versions, you can follow the instructions at [this link](https://github.com/plumed/masterclass-2022).
 
 The data needed to execute the exercises of this Masterclass can be found on [GitHub](https://github.com/valsson-group/masterclass-22-11).
 You can clone this repository locally on your machine using the following command:
@@ -28,6 +28,8 @@ You can clone this repository locally on your machine using the following comman
 ```
 git clone https://github.com/valsson-group/masterclass-22-11.git
 ```
+
+These files include the GROMACS and PLUMED files needed to run this tutorial, along with Jupyter notebook `Analysis.ipynb` that you can use to plot and analyze the results of the simulations. 
 
 ## Summary of Theory
 
@@ -255,8 +257,8 @@ At the end of simulation, you will get several files:
 
 To assess the simulation and its convergence, you should first look at the time evolution of the
 biased CV and check that it is diffusive in CV space. Second, you should look at how the free energy surfaces behave as
-a function of time by looking at the `fes.<bias-name>.iter-<iteration-number>.data` files at different number of iterations (the minimum of the FES is always align to zero
-to facilitate comparison). To do this, you need to use your favorite way to plot datafiles (e.g., Matplotlib or Gnuplot).
+a function of time by looking at the `fes.<bias-name>.iter-<iteration-number>.data` files at different number of iterations (the minimum of the FES is always aligned to zero
+to facilitate comparison). To do this, you need to use your favorite way to plot datafiles (e.g., Matplotlib or Gnuplot). For instance, you can use the `Analysis.ipynb` Jupyter notebook provided. 
 
 You can also visualize the trajectory by opening it with VMD by using the command
 ```
