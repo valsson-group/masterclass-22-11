@@ -121,15 +121,15 @@ In this tutorial, we will consider the association/dissociation of NaCl in aqueo
 
 The most relevant CV for this system is the distance between the Na and Cl atoms
 that is defined in PLUMED as
-\plumedfile
+```plumed
 dist:  DISTANCE ATOMS=322,323
-\endplumedfile
+```
 
 Furthermore, the NaCl association/dissociation is coupled to the collective motion
 of the solvent. To measure that, we will use a CV that measures the solvation of the
 Na atom. For this, we employ the coordination number of the Na atom with respect to
 the oxygens of the water molecules that we define in PLUMED as
-\plumedfile
+```plumed
 COORDINATION ...
  GROUPA=322
  GROUPB=1-321:3
@@ -139,18 +139,18 @@ COORDINATION ...
  NL_STRIDE=10
  LABEL=coord
 ... COORDINATION
-\endplumedfile
+```
 
 We will also limit CV space exploration by employing an upper wall on the distance between
 Na and Cl atoms that is defined in PLUMED as
-\plumedfile
+```plumed
 UPPER_WALLS ...
    ARG=dist
    AT=0.6
    KAPPA=4000.0
    LABEL=uwall
 ... UPPER_WALLS
-\endplumedfile
+```
 
 \section masterclass-22-11-ex-1 Exercise 1: Biasing with one collective variable
 
@@ -165,7 +165,7 @@ Every VES simulation has three key ingredients
 For the basis set, we will use the recently introduced [wavelet-based basis set](https://doi.org/10.1021/acs.jctc.2c00197) that are localized basis functions that have been shown to perform better than the previously used Chebyshev or Legendre polynomials. We will employ the least asymmetric variant of these wavelets or so-called symlets (as indicated by the TYPE=SYMLETS keyword). We will use an order 10 of the symlets or Sym10 (as indicated by the ORDER=10 keyword). Furthermore information about the wavelets can be found in the reference above.
 
 We need to select the range on which the bias potential is expanded. Here we will use the range from 0.2 nm to 0.7 nm (as indicated by the MINIMUM and MAXIMUM keywords). We also need to select the number of basis functions, and here we will use 26 basis functions (as indicated by the NUM_BF keyword). The PLUMED action corresponding to this setup is given by
-\plumedfile
+```plumed
 # Basisset for Na-Cl distance
 BF_WAVELETS ...
   LABEL=bf1
@@ -176,17 +176,17 @@ BF_WAVELETS ...
   MAXIMUM=0.7
   TAILS_THRESHOLD=0.01
 ... BF_WAVELETS
-\endplumedfile
+```
 
 For the target distribution, we employ a well-tempered distribution with a bias factor
 of 10.
-\plumedfile
+```plumed
 # Target distribution
 td: TD_WELLTEMPERED BIASFACTOR=10
-\endplumedfile
+```
 
 Then we define the VES bias potential using the \ref VES_LINEAR_EXPANSION action
-\plumedfile
+```plumed
 VES_LINEAR_EXPANSION ...
   LABEL=ves
   ARG=dist
@@ -196,7 +196,7 @@ VES_LINEAR_EXPANSION ...
   OPTIMIZATION_THRESHOLD=0.000001
   TARGET_DISTRIBUTION=td
 ... VES_LINEAR_EXPANSION
-\endplumedfile
+```
 
 Finally, we need to define the optimization algorithm. The standard is the averaged stochastic gradient descent (\ref OPT_AVERAGED_SGD).
 We need to define two parameters: the stride and the step size.
@@ -215,7 +215,7 @@ chosen a stride of 500 steps (i.e., 1 ps) and a step size of 5.0 kJ/mol.
 We also need to choose how often we update the target distribution (given by the
 keyword TARGETDIST_STRIDE) and we do this every 100 bias potential updates
 (i.e., every 100 ps in the current case).
-\plumedfile
+```plumed
 OPT_AVERAGED_SGD ...
   LABEL=opt
   BIAS=ves
@@ -227,13 +227,13 @@ OPT_AVERAGED_SGD ...
   TARGETDIST_STRIDE=100
   TARGETDIST_OUTPUT=500
 ... OPT_AVERAGED_SGD
-\endplumedfile
+```
 The other parameters are related to the outputting frequency of various output files.
 
 Finally, we need to define the \ref PRINT action to output all the variables
-\plumedfile
+```plumed
 PRINT ARG=dist,coord,ves.*,uwall.* FILE=colvar.data STRIDE=125
-\endplumedfile
+```
 
 The full PLUMED input file can be found in the Exercise-1 folder. There you also find all
 the relevant GROMACS input file. First, you need to run the
@@ -293,7 +293,7 @@ a new file called colvar_reweight.data.
 
 We can then perform the reweighting for the distance using the following PLUMED input
 (plumed_reweight.dat in the Exercise-2 folder)
-\plumedfile
+```plumed
 dist:   READ FILE=colvar_reweight.data IGNORE_TIME VALUES=dist
 coord:  READ FILE=colvar_reweight.data IGNORE_TIME VALUES=coord
 ves:    READ FILE=colvar_reweight.data IGNORE_TIME VALUES=ves.bias
@@ -312,7 +312,7 @@ HISTOGRAM ...
 
 fes_dist: CONVERT_TO_FES GRID=hg_dist TEMP=300 MINTOZERO
 DUMPGRID GRID=fes_dist FILE=fes-reweight.dist.data FMT=%24.16e
-\endplumedfile
+```
 
 You can run this input by using the PLUMED driver
 ```
@@ -326,7 +326,7 @@ We can also obtained the FES for CVs that are not biased in the VES simulation.
 For example, we can obtain the two-dimensional FES for the distance and the
 solvation CV given by the coordination number CV. For this, you will need to
 add the following to the plumed_reweight.dat file and repeat the PLUEMD driver run
-\plumedfile
+```plumed
 HISTOGRAM ...
   ARG=dist,coord
   GRID_MIN=0.2,2.5
@@ -338,7 +338,7 @@ HISTOGRAM ...
 ... HISTOGRAM
 fes_dist_coord: CONVERT_TO_FES GRID=hg_dist_coord TEMP=300 MINTOZERO
 DUMPGRID GRID=fes_dist_coord FILE=fes-reweight.dist-coord.data FMT=%24.16e
-\endplumedfile
+```
 Note that here we use kernel density estimation with Gaussian kernels to
 obtain smoother results.
 
@@ -365,7 +365,7 @@ in Exercise 1.
 We will now bias also the solvation CV. To achieve this, we need first to setup
 a separate basis set for the solvation CV, where again we use the symlets but
 with a different range from 2.0 to 8.0
-\plumedfile
+```plumed
 # Basisset for coordination number
 BF_WAVELETS ...
   LABEL=bf2
@@ -376,11 +376,11 @@ BF_WAVELETS ...
   MAXIMUM=7.5
   TAILS_THRESHOLD=0.01
 ... BF_WAVELETS
-\endplumedfile
+```
 
 We also need to change the relevant keywords in the \ref VES_LINEAR_EXPANSION action,
 namely the ARG, BASIS_FUNCTIONS, and GRID_BINS keywords
-\plumedfile
+```plumed
 VES_LINEAR_EXPANSION ...
   LABEL=ves
   ARG=dist,coord
@@ -392,7 +392,7 @@ VES_LINEAR_EXPANSION ...
   PROJ_ARG1=dist
   PROJ_ARG2=coord
 ... VES_LINEAR_EXPANSION
-\endplumedfile
+```
 Additionally, we have turned on the calculation of the one-dimensional projection
 of the FES on the two CVs (we also need to set the keyword
 FES_PROJ_OUTPUT=100 in \ref OPT_AVERAGED_SGD). This is useful to assess the
@@ -430,10 +430,10 @@ Perform a simulation using an uniform target distribution and see how this chang
 the results.
 
 In this case, you need to change the target distribution to
-\plumedfile
+```plumed
 # Target distribution
 td: TD_UNIFORM
-\endplumedfile
+```
 and remove the TARGETDIST_STRIDE and TARGETDIST_OUTPUT keywords from the \ref OPT_AVERAGED_SGD
 action.
 
@@ -444,7 +444,7 @@ basis functions, this should lead to more fluctuations in the bias potential as 
 in the [paper introducing the wavelets](https://doi.org/10.1021/acs.jctc.2c00197).
 
 In this case, you need to change the basis set action in the PLUMED input to
-\plumedfile
+```plumed
 # Basisset
 BF_LEGENDRE ...
   LABEL=bf1
@@ -452,7 +452,7 @@ BF_LEGENDRE ...
   MINIMUM=0.2
   MAXIMUM=0.7
 ... BF_LEGENDRE
-\endplumedfile
+```
 
 \section masterclass-22-11-comments Additional comments
 
