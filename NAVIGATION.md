@@ -1,10 +1,10 @@
 # Masterclass 22.11: Variationally Enhanced Sampling
 
-This lesson was given as part of the PLUMED masterclass series in 2022.  
+This Masterclass will discuss how to run variationally enhanced sampling simulations with PLUMED. This lesson was given as part of the PLUMED masterclass series in 2022. 
 
 It includes:
 
-* A video lecture that explain the theory covered (Lecture 1).
+* A video lecture that explains the background and theory behind Variationally Enhanced Sampling (Lecture 1).
 * The lecture slides covered in Lecture 1. 
 * A series of exercises that you should try to complete yourself.
 * A Video lecture going over how the exercises should be completed (Lecture 2).
