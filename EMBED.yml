@@ -1,0 +1,9 @@
+video1:
+  title: Lecture I
+  location: https://www.youtube.com/embed/Cmw_v2Y8o9k
+video2:
+  title: Lecture II
+  location: https://www.youtube.com/embed/rVFEF4YNLnk
+ref1:
+  location: https://github.com/plumed/masterclass-2022
+  type: external
