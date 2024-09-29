@@ -322,7 +322,7 @@ plumed driver --plumed plumed_reweight.dat --noatoms
 You should compare the resulting FES (the fes-reweight.dist.data file)
 to the results obtained directly from the bias potential in Exercise 1.
 
-We can also obtained the FES for CVs that are not biased in the VES simulation.
+We can also obtain the FES for CVs that are not biased in the VES simulation.
 For example, we can obtain the two-dimensional FES for the distance and the
 solvation CV given by the coordination number CV. For this, you will need to
 add the following to the plumed_reweight.dat file and repeat the PLUEMD driver run
@@ -347,7 +347,7 @@ the input above.
 
 This will generate a two-dimensional FES that you can visualize.
 
-\section masterclass-22-11-ex-3 Exercise 3: Run another independent simulation
+## Exercise 3: Run another independent simulation
 
 To check the results, it is a good practice to run another independent simulation
 using different initial conditions. You can achieve this here by changing the initial
@@ -360,7 +360,7 @@ check the convergence, and perform reweighting
 as before. Make sure that you do this in a new clean folder that is separate from the run
 in Exercise 1.
 
-\section masterclass-22-11-ex-4 Exercise 4: biasing with two collective variables
+## Exercise 4: biasing with two collective variables
 
 We will now bias also the solvation CV. To achieve this, we need first to setup
 a separate basis set for the solvation CV, where again we use the symlets but
@@ -405,15 +405,14 @@ Once you have performed this simulation, you should also try to reweight from
 this simulations. Furthermore, if you have time, you should also try to perform
 another independent simulation.
 
-
-\section masterclass-22-11-ex-optional Optional exercises
+## Optional exercises
 
 The following three exercises are optional, but they will show you how different
 parameters effect the results. You should base these exercises on the files from
 the Exercise-1 folder and make the necessary changes. Make sure that you run these
 simulations in separate folders and start from clean files from the Exercise-1 folder.
 
-\section masterclass-22-11-ex-5 Optional exercise 5: Play with the optimization parameters
+### Optional exercise 5: Play with the optimization parameters
 
 The main parameter in the optimization algorithm is the step size and
 it is not always easy to choose this parameter. Luckily, the algorithm
@@ -425,7 +424,7 @@ system gets stuck in CV space and coefficients oscillate wildly. When the step s
 too small, the algorithm runs out of "steam" too fast and the simulation converges slowly.
 These two extreme cases should be avoided.
 
-\section masterclass-22-11-ex-6 Optional exercise 6: Uniform target distribution
+### Optional exercise 6: Uniform target distribution
 Perform a simulation using an uniform target distribution and see how this changes
 the results.
 
@@ -454,19 +453,19 @@ BF_LEGENDRE ...
 ... BF_LEGENDRE
 ```
 
-\section masterclass-22-11-comments Additional comments
+## Additional comments
 
 This should cover the basics of running VES simulations in PLUMED, but the following
 comments might be of interest to some.
 
-\subsection masterclass-22-11-comments-restarting Restarting
+### Restarting
 VES simulations can be easily restarted. The code will automatically output
 all the file needed at the end of the simulation. To restart, you just need to
 reset the simulation with your MD code in the traditional way and add a \ref RESET
 keyword to the top of the PLUMED input (for some codes like GROMACS, a restart is
 automatically detected by PLUMED and thus this keyword is not needed).
 
-\subsection masterclass-22-11-comments-multiplewalkers Multiple Walkers
+### Multiple Walkers
 
 VES simulations supports the usage of multiple walkers where different copies of the system share the same bias potential (i.e. coefficients) and cooperatively sample the averages needed for the gradient and Hessian. This can significantly help with convergence in difficult cases. It is of course best to start the different copies from different positions in CV space. To activate this option you just need to add the MULTIPLE_WALKERS keyword to the \ref OPT_AVERAGED_SGD action. Note that this is only supported if the MD code support running multiple replicas connected via MPI (e.g., GROMACS or LAMMPS).
 
