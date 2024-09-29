@@ -65,7 +65,7 @@ where $f_i(\mathbf{s})$ are the basis functions and the $\boldsymbol\alpha$ are 
 We then need to find the coefficients $\boldsymbol\alpha$ that minimize $\Omega
 [V]$. In principle one could use any optimization algorithm. In practice
 the algorithm that has become the default choice for VES is the so-called
-averaged stochastic gradient descent algorithm \cite Bach-NIPS-2013.
+[averaged stochastic gradient descent algorithm](http://papers.nips.cc/paper/4900-non-strongly-convex-smooth-stochastic-approximation-with-convergence-rate-o1n.pdf).
 In this algorithm the $\boldsymbol\alpha$ are evolved iteratively
 according to:
 
@@ -80,11 +80,11 @@ $\bar{\boldsymbol\alpha}^{(n)}$ is the running average of $\boldsymbol\alpha^{(n
 $\nabla\Omega(\bar{\boldsymbol\alpha}^{(n)})$ and
 $H(\bar{\boldsymbol\alpha}^{(n)})$ are the gradient and Hessian of $\Omega[V]$ evaluated at the running
 average at iteration $n$, respectively.
-The behavior of the coefficients will become clear in the examples below.
+The behavior of the coefficients will become apparent in the examples below.
 
 As said above, we can choose the target distribution $p_{\mathrm{tg}}(\mathbf{s})$ at will.
-The most simple choice would be a uniform target distribution. However, it has found more optimal to
-employ the so-called well-tempered distribution \cite Valsson-JCTC-2015 :
+The most simple choice would be a uniform target distribution. However, it has been found more optimal to
+employ the so-called well-tempered distribution  (see [here](http://doi.org/10.1021/acs.jctc.5b00076)):
 
 $$p_{\mathrm{tg}}(\mathbf{s}) =
 \frac{[ P(\mathbf{s}) ]^{1/\gamma}}
@@ -101,7 +101,7 @@ as it would if we had chosen the uniform target distribution.
 There is a caveat though, the well-tempered $p_{\mathrm{tg}}(\mathbf{s})$ depends on 
 $F(\mathbf{s})$ that is the function that we are trying to calculate.
 One way to approach this problem is to calculate $p_{\mathrm{tg}}(\mathbf{s})$
-self-consistently \cite Valsson-JCTC-2015, for instance at iteration $k$:
+self-consistently (see [here](http://doi.org/10.1021/acs.jctc.5b00076)), for instance at iteration $k$:
 
 $$p^{(k+1)}(\mathbf{s})=\frac{e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}{\int d\mathbf{s} \ e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}$$
 
@@ -113,7 +113,7 @@ Normally $p^{(0)}(\mathbf{s})$ is taken to be uniform.
 Therefore the target distribution evolves in time until it becomes stationary
 when the simulation has converged. It has been shown that in some cases the
 convergence is faster using the well-tempered target distribution than using
-the uniform $p(\mathbf{s})$ \cite Valsson-JCTC-2015.
+the uniform $p(\mathbf{s})$  (see [here](http://doi.org/10.1021/acs.jctc.5b00076)).
 
 ## The system
 
