@@ -43,54 +43,54 @@ $$\Omega [V]  =
 \int d\mathbf{s} \ p_{\mathrm{tg}}(\mathbf{s}) \, V(\mathbf{s}),$$
 
 where $\mathbf{s}$ are the CVs that we are biasing,
-\f$ p_{\mathrm{tg}}(\mathbf{s}) \f$ is a predefined probability distribution that we will refer
-to as the target distribution, and \f$ F(\mathbf{s}) \f$ is the free energy
+$ p_{\mathrm{tg}}(\mathbf{s}) $ is a predefined probability distribution that we will refer
+to as the target distribution, and $ F(\mathbf{s}) $ is the free energy
 surface. This functional can be shown to be convex and to have a minimum at:
-\f[
+$$
 V(\mathbf{s}) = -F(\mathbf{s})-{\frac {1}{\beta}} \log {p_{\mathrm{tg}}(\mathbf{s})}.
-\f]
-The last equation states that when we minimize the functional \f$ \Omega [V] \f$,
+$$
+The last equation states that when we minimize the functional $ \Omega [V] $,
 we can obtain the free energy surface from the bias potential (and the target distribution)
-We can choose the target distribution \f$ p_{\mathrm{tg}}(\mathbf{s}) \f$ at will and it is
-the CV distribution that we obtain when minimizing \f$ \Omega [V] \f$.
+We can choose the target distribution $ p_{\mathrm{tg}}(\mathbf{s}) $ at will and it is
+the CV distribution that we obtain when minimizing $ \Omega [V] $.
 
-We put the variational principle to practice by expanding \f$ V(\mathbf{s}) \f$
+We put the variational principle to practice by expanding $ V(\mathbf{s}) $
 in some basis set:
-\f[
+$$
 V(\mathbf{s}) = \sum\limits_{i} \alpha_i \, f_i(\mathbf{s}),
-\f]
-where \f$ f_i(\mathbf{s}) \f$ are the basis functions and the \f$\boldsymbol\alpha \f$ are the coefficients in the expansion.
-We then need to find the coefficients \f$\boldsymbol\alpha \f$ that minimize \f$ \Omega
-[V] \f$. In principle one could use any optimization algorithm. In practice
+$$
+where $ f_i(\mathbf{s}) $ are the basis functions and the $\boldsymbol\alpha $ are the coefficients in the expansion.
+We then need to find the coefficients $\boldsymbol\alpha $ that minimize $ \Omega
+[V] $. In principle one could use any optimization algorithm. In practice
 the algorithm that has become the default choice for VES is the so-called
 averaged stochastic gradient descent algorithm \cite Bach-NIPS-2013.
-In this algorithm the \f$\boldsymbol\alpha \f$ are evolved iteratively
+In this algorithm the $\boldsymbol\alpha $ are evolved iteratively
 according to:
-\f[
+$$
 \boldsymbol\alpha^{(n+1)} = \boldsymbol\alpha^{(n)}-\mu
  \left[
 \nabla\Omega(\bar{\boldsymbol\alpha}^{(n)})+
 H(\bar{\boldsymbol\alpha}^{(n)})[\boldsymbol\alpha^{(n)}-\bar{\boldsymbol\alpha}^{(n)}]
 \right]
-\f]
-where \f$\mu\f$ is the step size,
-\f$\bar{\boldsymbol\alpha}^{(n)} \f$ is the running average of \f$\boldsymbol\alpha^{(n)} \f$ at iteration \f$ n \f$, and
-\f$\nabla\Omega(\bar{\boldsymbol\alpha}^{(n)}) \f$ and
-\f$H(\bar{\boldsymbol\alpha}^{(n)}) \f$
- are the gradient and Hessian of \f$ \Omega[V] \f$ evaluated at the running
-average at iteration \f$ n \f$, respectively.
+$$
+where $\mu$ is the step size,
+$\bar{\boldsymbol\alpha}^{(n)} $ is the running average of $\boldsymbol\alpha^{(n)} $ at iteration $ n $, and
+$\nabla\Omega(\bar{\boldsymbol\alpha}^{(n)}) $ and
+$H(\bar{\boldsymbol\alpha}^{(n)}) $
+ are the gradient and Hessian of $ \Omega[V] $ evaluated at the running
+average at iteration $ n $, respectively.
 The behavior of the coefficients will become clear in the examples below.
 
-As said above, we can choose the target distribution \f$ p_{\mathrm{tg}}(\mathbf{s}) \f$ at will.
+As said above, we can choose the target distribution $ p_{\mathrm{tg}}(\mathbf{s}) $ at will.
 The most simple choice would be a uniform target distribution. However, it has found more optimal to
 employ the so-called well-tempered distribution \cite Valsson-JCTC-2015 :
-\f[
+$$
 p_{\mathrm{tg}}(\mathbf{s}) =
 \frac{[ P(\mathbf{s}) ]^{1/\gamma}}
 {\int d\mathbf{s}\, [ P(\mathbf{s}) ]^{1/\gamma}}
-\f]
-where \f$ \gamma \f$ is the so-called bias
-factor and \f$ P(\mathbf{s}) \f$ is the unbiased CV distribution. Therefore the
+$$
+where $ \gamma $ is the so-called bias
+factor and $ P(\mathbf{s}) $ is the unbiased CV distribution. Therefore the
 well-tempered distribution is the unbiased distribution with enhanced fluctuations
 and lowered barriers. This is the same distribution as sampled in well-tempered
 metadynamics. The advantages of this distribution are that the features of the
@@ -98,22 +98,22 @@ FES (metastable states) are preserved and that the system is not forced to sampl
 free energy (that can represent un-physical configurations)
 as it would if we had chosen the uniform target distribution.
 
-There is a caveat though, the well-tempered \f$ p_{\mathrm{tg}}(\mathbf{s}) \f$ depends on \f$
-F(\mathbf{s})\f$ that is the function that we are trying to calculate.
-One way to approach this problem is to calculate \f$ p_{\mathrm{tg}}(\mathbf{s}) \f$
-self-consistently \cite Valsson-JCTC-2015, for instance at iteration \f$ k \f$:
-\f[
+There is a caveat though, the well-tempered $ p_{\mathrm{tg}}(\mathbf{s}) $ depends on $
+F(\mathbf{s})$ that is the function that we are trying to calculate.
+One way to approach this problem is to calculate $ p_{\mathrm{tg}}(\mathbf{s}) $
+self-consistently \cite Valsson-JCTC-2015, for instance at iteration $ k $:
+$$
 p^{(k+1)}(\mathbf{s})=\frac{e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}{\int d\mathbf{s} \, e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}
-\f]
+$$
 where:
-\f[
+$$
 F^{(k+1)}(\mathbf{s})=-V^{(k)}(\mathbf{s}) - \frac{1}{\beta} \log p^{(k)}(\mathbf{s})
-\f]
-Normally \f$ p^{(0)}(\mathbf{s}) \f$ is taken to be uniform.
+$$
+Normally $ p^{(0)}(\mathbf{s}) $ is taken to be uniform.
 Therefore the target distribution evolves in time until it becomes stationary
 when the simulation has converged. It has been shown that in some cases the
 convergence is faster using the well-tempered target distribution than using
-the uniform \f$ p(\mathbf{s}) \f$ \cite Valsson-JCTC-2015.
+the uniform $ p(\mathbf{s}) $ \cite Valsson-JCTC-2015.
 
 \section masterclass-22-11-system The system
 
@@ -201,9 +201,9 @@ VES_LINEAR_EXPANSION ...
 Finally, we need to define the optimization algorithm. The standard is the averaged stochastic gradient descent (\ref OPT_AVERAGED_SGD).
 We need to define two parameters: the stride and the step size.
 The stride (given by the keyword STRIDE) is the number of MD steps in which samples
-are collected to calculate the gradient and hessian of \f$ \Omega [V] \f$. The
+are collected to calculate the gradient and hessian of $ \Omega [V] $. The
 step size (given by the keyword STEPSIZE) is the step by which the coefficients
-are evolved at every optimization steps, given by \f$\mu\f$ in the equation above.
+are evolved at every optimization steps, given by $\mu$ in the equation above.
 It has become
 traditional to choose a stride of around 500-2000 MD steps. It must be noted that we
 are not looking for an accurate estimation of the gradient, since for this we
@@ -248,7 +248,7 @@ The run might take around 15-20 minutes to run using two MPI processes. You can 
 
 At the end of simulation, you will get several files:
 - colvar.data: Colvar file
-- coeffs.data : Values of the coefficients \f$\boldsymbol\alpha \f$ and \f$\bar{\boldsymbol\alpha} \f$ at different iterations.
+- coeffs.data : Values of the coefficients $\boldsymbol\alpha $ and $\bar{\boldsymbol\alpha} $ at different iterations.
 - bias.<bias-label>.iter-<iteration-number>.data : Bias potential at iteration <iteration-number>.
 - fes.<bias-name>.iter-<iteration-number>.data : FES at iteration <iteration-number>.
 - targetdistribution.<bias-name>.iter-<iteration-number>.data : Target distribution at iteration <iteration-number>.
@@ -264,22 +264,22 @@ vmd NaCl_StartingStructure-1.gro NaCl_VES_NPT-300K.pbc-whole.xtc
 \endverbatim
 The NaCl_VES_NPT-300K.pbc-whole.xtc is the trajectory file with the periodic boundary conditions made whole. This is done with the run.sh script.
 
-The coeffs.data file includes the values of coefficients \f$\boldsymbol\alpha \f$ and \f$\bar{\boldsymbol\alpha} \f$ at different iterations. To extract the time evolution of
+The coeffs.data file includes the values of coefficients $\boldsymbol\alpha $ and $\bar{\boldsymbol\alpha} $ at different iterations. To extract the time evolution of
 a given coefficient, you can use the ExtractCoeff.sh script, for example to extract
 coefficient 3:
 \verbatim
 ./ExtractCoeff.sh 3 > coeff.3.data
 \endverbatim
 This will create a file with the first column the iteration number, the second
-column the averaged coefficient \f$\bar{\boldsymbol\alpha} \f$, and the third column
-the instantaneous coefficients \f$\boldsymbol\alpha \f$. You should create files for
+column the averaged coefficient $\bar{\boldsymbol\alpha} $, and the third column
+the instantaneous coefficients $\boldsymbol\alpha $. You should create files for
 different coefficient and visualize both the second and third column to understand
 how the coefficients converge.
 
 \section masterclass-22-11-ex-2 Exercise 2: Reweighting a VES simulation
 Apart from estimating the FES directly from the bias potential, you can also estimate
 the FES through reweighting by histogramming where each configuration is weighted by the
-bias acting on it, \f$ e^{\beta V(\mathbf{s})} \f$. The VES bias acting at each time step
+bias acting on it, $ e^{\beta V(\mathbf{s})} $. The VES bias acting at each time step
 is given by the ves.bias variable in the colvar.dat file.
 
 When doing performing reweighting, it is better to ignore the initial part of
