@@ -240,10 +240,10 @@ the relevant GROMACS input file. First, you need to run the
 generate-tpr-file.sh script that generates the GROMACS TPR file using the parameters defined in MD-NPT.mdp
 and the initial geometry defined using the StartingGeometry variable. You can then run the simulation using
 the run.sh script
-\verbatim
+```
 ./generate-tpr-file.sh
 ./run.sh
-\endverbatim
+```
 The run might take around 15-20 minutes to run using two MPI processes. You can adjust the number of MIP processes used for the simulation using the NumProcs variable in the run.sh script.
 
 At the end of simulation, you will get several files:
@@ -259,17 +259,17 @@ a function of time by looking at the fes.<bias-name>.iter-<iteration-number>.dat
 to facilitate comparison). To do this, you need to use your favorite way to plot datafiles (e.g., Matplotlib or Gnuplot).
 
 You can also visualize the trajectory by opening it with VMD by using the command
-\verbatim
+```
 vmd NaCl_StartingStructure-1.gro NaCl_VES_NPT-300K.pbc-whole.xtc
-\endverbatim
+```
 The NaCl_VES_NPT-300K.pbc-whole.xtc is the trajectory file with the periodic boundary conditions made whole. This is done with the run.sh script.
 
 The coeffs.data file includes the values of coefficients $\boldsymbol\alpha $ and $\bar{\boldsymbol\alpha} $ at different iterations. To extract the time evolution of
 a given coefficient, you can use the ExtractCoeff.sh script, for example to extract
 coefficient 3:
-\verbatim
+```
 ./ExtractCoeff.sh 3 > coeff.3.data
-\endverbatim
+```
 This will create a file with the first column the iteration number, the second
 column the averaged coefficient $\bar{\boldsymbol\alpha} $, and the third column
 the instantaneous coefficients $\boldsymbol\alpha $. You should create files for
@@ -285,9 +285,9 @@ is given by the ves.bias variable in the colvar.dat file.
 When doing performing reweighting, it is better to ignore the initial part of
 the simulation where the bias potential is changing more rapidly. You can use the
 trim-colvar-file.py python script in the Exercise-2 folder to do this
-\verbatim
+```
 ./trim-colvar-file.py --colvar-file ../Exercise-1/colvar.data --output-file colvar_reweight.data --time-min 400
-\endverbatim
+```
 where here we ignore the first 400 ps of the colvar.data file from the Exercise-1 and create
 a new file called colvar_reweight.data.
 
@@ -315,9 +315,9 @@ DUMPGRID GRID=fes_dist FILE=fes-reweight.dist.data FMT=%24.16e
 \endplumedfile
 
 You can run this input by using the PLUMED driver
-\verbatim
+```
 plumed driver --plumed plumed_reweight.dat --noatoms
-\endverbatim
+```
 
 You should compare the resulting FES (the fes-reweight.dist.data file)
 to the results obtained directly from the bias potential in Exercise 1.
@@ -352,9 +352,9 @@ This will generate a two-dimensional FES that you can visualize.
 To check the results, it is a good practice to run another independent simulation
 using different initial conditions. You can achieve this here by changing the initial
 geometry in the generate-tpr-file.sh script
-\verbatim
+```
 StartingGeometry=NaCl_StartingStructure-2.gro
-\endverbatim
+```
 and regenerating the GROMACS tpr file. Do this and rerun the simulation,
 check the convergence, and perform reweighting
 as before. Make sure that you do this in a new clean folder that is separate from the run
