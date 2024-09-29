@@ -124,6 +124,7 @@ In this tutorial, we will consider the association/dissociation of NaCl in aqueo
 The most relevant CV for this system is the distance between the Na and Cl atoms
 that is defined in PLUMED as
 ```plumed
+# Distance between Na and Cl atoms
 dist:  DISTANCE ATOMS=322,323
 ```
 
@@ -132,6 +133,7 @@ of the solvent. To measure that, we will use a CV that measures the solvation of
 Na atom. For this, we employ the coordination number of the Na atom with respect to
 the oxygens of the water molecules that we define in PLUMED as
 ```plumed
+# Solvation of Na atom
 COORDINATION ...
  GROUPA=322
  GROUPB=1-321:3
@@ -146,6 +148,11 @@ COORDINATION ...
 We will also limit CV space exploration by employing an upper wall on the distance between
 Na and Cl atoms that is defined in PLUMED as
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+#ENDHIDDEN
+
 UPPER_WALLS ...
    ARG=dist
    AT=0.6
@@ -158,7 +165,7 @@ UPPER_WALLS ...
 
 We will start by performing a simulation where we bias the Na-Cl distance.
 
-Every VES simulation has three key ingredients
+Every VES simulation has three key ingredients:
 
 - Basis set
 - Target distribution
@@ -168,6 +175,22 @@ For the basis set, we will use the recently introduced [wavelet-based basis set]
 
 We need to select the range on which the bias potential is expanded. Here we will use the range from 0.2 nm to 0.7 nm (as indicated by the `MINIMUM=0.2` and `MAXIMUM=0.7` keywords). We also need to select the number of basis functions, and here we will use 26 basis functions (as indicated by the `NUM_BF=26` keyword). The PLUMED action corresponding to this setup is given by
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+#ENDHIDDEN
+
 # Basisset for Na-Cl distance
 BF_WAVELETS ...
   LABEL=bf1
@@ -183,12 +206,69 @@ BF_WAVELETS ...
 For the target distribution, we employ a well-tempered distribution with a bias factor
 of 10.
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+#ENDHIDDEN
+
 # Target distribution
 td: TD_WELLTEMPERED BIASFACTOR=10
 ```
 
 Then we define the VES bias potential using the `VES_LINEAR_EXPANSION` action
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+
+# Target distribution
+td: TD_WELLTEMPERED BIASFACTOR=10
+#ENDHIDDEN
+
 VES_LINEAR_EXPANSION ...
   LABEL=ves
   ARG=dist
@@ -219,6 +299,46 @@ keyword `TARGETDIST_STRIDE`) and we do this every 100 bias potential updates
 (i.e., every 100 ps in the current case).
 
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+
+# Target distribution
+td: TD_WELLTEMPERED BIASFACTOR=10
+
+VES_LINEAR_EXPANSION ...
+  LABEL=ves
+  ARG=dist
+  BASIS_FUNCTIONS=bf1
+  TEMP=300.0
+  GRID_BINS=300
+  OPTIMIZATION_THRESHOLD=0.000001
+  TARGET_DISTRIBUTION=td
+... VES_LINEAR_EXPANSION
+#ENDHIDDEN
+
 OPT_AVERAGED_SGD ...
   LABEL=opt
   BIAS=ves
@@ -235,6 +355,65 @@ The other parameters are related to the outputting frequency of various output f
 
 Finally, we need to define the `PRINT` action to output all the variables
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+
+# Target distribution
+td: TD_WELLTEMPERED BIASFACTOR=10
+
+VES_LINEAR_EXPANSION ...
+  LABEL=ves
+  ARG=dist
+  BASIS_FUNCTIONS=bf1
+  TEMP=300.0
+  GRID_BINS=300
+  OPTIMIZATION_THRESHOLD=0.000001
+  TARGET_DISTRIBUTION=td
+... VES_LINEAR_EXPANSION
+
+OPT_AVERAGED_SGD ...
+  LABEL=opt
+  BIAS=ves
+  STRIDE=500
+  STEPSIZE=5.0
+  FES_OUTPUT=100
+  BIAS_OUTPUT=1000
+  COEFFS_OUTPUT=10
+  TARGETDIST_STRIDE=100
+  TARGETDIST_OUTPUT=500
+... OPT_AVERAGED_SGD
+
+UPPER_WALLS ...
+   ARG=dist
+   AT=0.6
+   KAPPA=4000.0
+   LABEL=uwall
+...
+#ENDHIDDEN
+
 PRINT ARG=dist,coord,ves.*,uwall.* FILE=colvar.data STRIDE=125
 ```
 
@@ -378,6 +557,33 @@ We will now bias also the solvation CV. To achieve this, we need first to setup
 a separate basis set for the solvation CV, where again we use the symlets but
 with a different range from 2.0 to 8.0
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+#ENDHIDDEN
+
 # Basisset for coordination number
 BF_WAVELETS ...
   LABEL=bf2
@@ -393,6 +599,49 @@ BF_WAVELETS ...
 We also need to change the relevant keywords in the `VES_LINEAR_EXPANSION` action,
 namely the `ARG`, `BASIS_FUNCTIONS`, and `GRID_BINS` keywords
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+
+# Basisset for coordination number
+BF_WAVELETS ...
+  LABEL=bf2
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=2.5
+  MAXIMUM=7.5
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+
+
+# Target distribution
+td: TD_WELLTEMPERED BIASFACTOR=10
+#ENDHIDDEN
+
+
 VES_LINEAR_EXPANSION ...
   LABEL=ves
   ARG=dist,coord
@@ -442,10 +691,37 @@ the results.
 
 In this case, you need to change the target distribution to
 ```plumed
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+
+# Basisset for Na-Cl distance
+BF_WAVELETS ...
+  LABEL=bf1
+  TYPE=SYMLETS
+  ORDER=10
+  NUM_BF=26
+  MINIMUM=0.2
+  MAXIMUM=0.7
+  TAILS_THRESHOLD=0.01
+... BF_WAVELETS
+#ENDHIDDEN
+
 # Target distribution
 td: TD_UNIFORM
 ```
-and remove the TARGETDIST_STRIDE and TARGETDIST_OUTPUT keywords from the \ref OPT_AVERAGED_SGD
+and remove the `TARGETDIST_STRIDE` and `TARGETDIST_OUTPUT` keywords from the \ref OPT_AVERAGED_SGD
 action.
 
 ### Legendre polynomials basis function 
@@ -456,7 +732,22 @@ in the [paper introducing the wavelets](https://doi.org/10.1021/acs.jctc.2c00197
 
 In this case, you need to change the basis set action in the PLUMED input to
 ```plumed
-# Basisset
+#HIDDEN
+# Distance between Na and Cl atoms
+dist: DISTANCE ATOMS=322,323
+
+# Solvation of Na atom
+COORDINATION ...
+  LABEL=coord
+  GROUPA=322
+  GROUPB=1-321:3
+  SWITCH={RATIONAL R_0=0.315 D_MAX=0.5 NN=12 MM=24}
+  NLIST
+  NL_CUTOFF=0.55
+  NL_STRIDE=10
+... COORDINATION
+#ENDHIDDEN 
+# Basisset for Na-Cl distance
 BF_LEGENDRE ...
   LABEL=bf1
   ORDER=20
