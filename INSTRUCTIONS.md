@@ -20,7 +20,7 @@ Once you have completed this Masterclass you will be able to:
 
 ## Setting up PLUMED
 
-For this masterclass you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. In order to obtain the correct versions, please follow the instructions at [this link](https://github.com/plumed/masterclass-2022).
+For this masterclass you will need versions of PLUMED (with the VES module enabled) and GROMACS that are compiled using the MPI library. All the exercises were tested with PLUMED version 2.8.0 and GROMACS 2020.6. For example, to obtain these version, you can follow the instructions at [this link](https://github.com/plumed/masterclass-2022).
 
 The data needed to execute the exercises of this Masterclass can be found on [GitHub](https://github.com/valsson-group/masterclass-22-11).
 You can clone this repository locally on your machine using the following command:
@@ -51,7 +51,7 @@ surface. This functional can be shown to be convex and to have a minimum at:
 $$V(\mathbf{s}) = -F(\mathbf{s})-{\frac {1}{\beta}} \log {p_{\mathrm{tg}}(\mathbf{s})}.$$
 
 The last equation states that when we minimize the functional $\Omega [V]$,
-we can obtain the free energy surface from the bias potential (and the target distribution)
+we can obtain the free energy surface from the bias potential (and the target distribution).
 We can choose the target distribution $p_{\mathrm{tg}}(\mathbf{s})$ at will and it is
 the CV distribution that we obtain when minimizing $\Omega [V]$.
 
@@ -115,7 +115,7 @@ when the simulation has converged. It has been shown that in some cases the
 convergence is faster using the well-tempered target distribution than using
 the uniform $p(\mathbf{s})$ \cite Valsson-JCTC-2015.
 
-\section masterclass-22-11-system The system
+## The system
 
 In this tutorial, we will consider the association/dissociation of NaCl in aqueous solution. The system consists of 1 Na atom, 1 Cl atom, and 107 water molecules for a total of 323 atoms. In an effort to speed up the simulations, we employ a rather small water box, and thus need to employ smaller cutoffs than usually used. Therefore, this simulation setup should not be used in production runs. Typically, the run should take around 15-20 minutes to run on a laptop using two MPI processes. By running the simulations on a cluster, you reduce the simulation time.
 
@@ -152,7 +152,7 @@ UPPER_WALLS ...
 ... UPPER_WALLS
 ```
 
-\section masterclass-22-11-ex-1 Exercise 1: Biasing with one collective variable
+## Exercise 1: Biasing with one collective variable
 
 We will start by performing a simulation where we bias the Na-Cl distance.
 
@@ -276,7 +276,7 @@ the instantaneous coefficients $\boldsymbol\alpha $. You should create files for
 different coefficient and visualize both the second and third column to understand
 how the coefficients converge.
 
-\section masterclass-22-11-ex-2 Exercise 2: Reweighting a VES simulation
+## Exercise 2: Reweighting a VES simulation
 Apart from estimating the FES directly from the bias potential, you can also estimate
 the FES through reweighting by histogramming where each configuration is weighted by the
 bias acting on it, $ e^{\beta V(\mathbf{s})} $. The VES bias acting at each time step
@@ -436,7 +436,7 @@ td: TD_UNIFORM
 and remove the TARGETDIST_STRIDE and TARGETDIST_OUTPUT keywords from the \ref OPT_AVERAGED_SGD
 action.
 
-\section masterclass-22-11-ex-7 Optional exercise 7: Legendre polynomials basis function 
+### Legendre polynomials basis function 
 Perform a simulation using Legendre polynomials (\ref BF_LEGENDRE) basis functions instead of the
 wavelets and see how this will affect the result. As the Legendre polynomials are delocalized
 basis functions, this should lead to more fluctuations in the bias potential as has been observed
@@ -470,15 +470,3 @@ automatically detected by PLUMED and thus this keyword is not needed).
 VES simulations supports the usage of multiple walkers where different copies of the system share the same bias potential (i.e. coefficients) and cooperatively sample the averages needed for the gradient and Hessian. This can significantly help with convergence in difficult cases. It is of course best to start the different copies from different positions in CV space. To activate this option you just need to add the MULTIPLE_WALKERS keyword to the \ref OPT_AVERAGED_SGD action. Note that this is only supported if the MD code support running multiple replicas connected via MPI (e.g., GROMACS or LAMMPS).
 
 
-
-
-
-
-
-
-
-*/
-
-link: @subpage masterclass-22-11
-
-description: This Masterclass explains how to run variationally enhanced sampling simulations with PLUMED
