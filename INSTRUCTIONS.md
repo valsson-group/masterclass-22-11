@@ -117,7 +117,7 @@ when the simulation has converged. It has been shown that in some cases the
 convergence is faster using the well-tempered target distribution than using
 the uniform $p(\mathbf{s})$  (see [here](http://doi.org/10.1021/acs.jctc.5b00076)).
 
-## The system
+## The System: Association/Dissociation of NaCl in Aqueous Solution
 
 In this tutorial, we will consider the association/dissociation of NaCl in aqueous solution. The system consists of 1 Na atom, 1 Cl atom, and 107 water molecules for a total of 323 atoms. In an effort to speed up the simulations, we employ a rather small water box, and thus need to employ smaller cutoffs than usually used. Therefore, this simulation setup should not be used in production runs. Typically, the run should take around 15-20 minutes to run on a laptop using two MPI processes. By running the simulations on a cluster, you reduce the simulation time.
 
@@ -161,7 +161,7 @@ UPPER_WALLS ...
 ... UPPER_WALLS
 ```
 
-## Exercise 1: Biasing with one collective variable
+## Exercise 1: Biasing with One Collective Variable
 
 We will start by performing a simulation where we bias the Na-Cl distance.
 
@@ -458,7 +458,7 @@ the instantaneous coefficients $\boldsymbol\alpha$. You should create files for
 different coefficient and visualize both the second and third columns to understand
 how the coefficients converge.
 
-## Exercise 2: Reweighting a VES simulation
+## Exercise 2: Reweighting a VES Simulation
 Apart from estimating the FES directly from the bias potential, you can also estimate
 the FES through reweighting by histogramming where each configuration is weighted by the
 bias acting on it, $e^{\beta V(\mathbf{s})}$. The VES bias acting at each time step
@@ -538,7 +538,7 @@ the input above.
 
 This will generate a two-dimensional FES that you can visualize.
 
-## Exercise 3: Run another independent simulation
+## Exercise 3: Running Another Independent Simulation
 
 To check the results, it is a good practice to run another independent simulation
 using different initial conditions. You can achieve this here by changing the initial
@@ -551,7 +551,7 @@ check the convergence, and perform reweighting
 as before. Make sure that you do this in a new clean folder that is separate from the run
 in Exercise 1.
 
-## Exercise 4: biasing with two collective variables
+## Exercise 4: Biasing with Two Collective Variables
 
 We will now bias also the solvation CV. To achieve this, we need first to setup
 a separate basis set for the solvation CV, where again we use the symlets but
@@ -666,14 +666,14 @@ Once you have performed this simulation, you should also try to reweight from
 this simulations. Furthermore, if you have time, you should also try to perform
 another independent simulation.
 
-## Optional exercises
+## Optional Exercises
 
 The following three exercises are optional, but they will show you how different
 parameters effect the results. You should base these exercises on the files from
 the Exercise-1 folder and make the necessary changes. Make sure that you run these
 simulations in separate folders and start from clean files from the Exercise-1 folder.
 
-### Optional exercise 5: Play with the optimization parameters
+### Optional Exercise 5: Play with the Optimization Parameters
 
 The main parameter in the optimization algorithm is the step size and
 it is not always easy to choose this parameter. Luckily, the algorithm
@@ -685,7 +685,7 @@ system gets stuck in CV space and coefficients oscillate wildly. When the step s
 too small, the algorithm runs out of "steam" too fast and the simulation converges slowly.
 These two extreme cases should be avoided.
 
-### Optional exercise 6: Uniform target distribution
+### Optional Exercise 6: Uniform Target Distribution
 Perform a simulation using an uniform target distribution and see how this changes
 the results.
 
