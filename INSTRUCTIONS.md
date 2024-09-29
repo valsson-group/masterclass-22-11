@@ -1,7 +1,8 @@
 # PLUMED Masterclass 22.11: Variationally Enhanced Sampling
 
 ## Author
-Omar Valsson, Department of Chemistry, University of North Texas   
+Omar Valsson  
+Department of Chemistry, University of North Texas   
 Webpage: www.valsson.info  
 July 4, 2022
 
@@ -30,7 +31,7 @@ git clone https://github.com/valsson-group/masterclass-22-11.git
 
 ## Summary of Theory
 
-Here, we will briefly summarize the theory behind variationally enhanced sampling (VES). For an full overview of VES, you should read the [original paper](https://doi.org/10.1103/PhysRevLett.113.090601), a recent review [book chapter on VES](https://doi.org/10.1007/978-3-319-44677-6_50), or a recent [enhanced sampling review](https://doi.org/10.33011/livecoms.4.1.1583) that includes discussion about VES.
+Here, we will briefly summarize the theory behind variationally enhanced sampling (VES). For an full overview of VES, you should read the [original paper](https://doi.org/10.1103/PhysRevLett.113.090601), a  review in a [book chapter on VES](https://doi.org/10.1007/978-3-319-44677-6_50), or a recent [enhanced sampling review](https://doi.org/10.33011/livecoms.4.1.1583) that includes discussion about VES.
 
 VES is based on the the following functional of the bias potential:
 
@@ -40,80 +41,79 @@ $$\Omega [V]  =
 {\int d\mathbf{s} \ e^{-\beta \left[ F(\mathbf{s}) + V(\mathbf{s})\right]}}
 {\int d\mathbf{s} \ e^{-\beta F(\mathbf{s})}}
 +
-\int d\mathbf{s} \ p_{\mathrm{tg}}(\mathbf{s}) \, V(\mathbf{s}),$$
+\int d\mathbf{s} \ p_{\mathrm{tg}}(\mathbf{s}) \ V(\mathbf{s}),$$
 
 where $\mathbf{s}$ are the CVs that we are biasing,
-$ p_{\mathrm{tg}}(\mathbf{s}) $ is a predefined probability distribution that we will refer
-to as the target distribution, and $ F(\mathbf{s}) $ is the free energy
+$p_{\mathrm{tg}}(\mathbf{s})$ is a predefined probability distribution that we will refer
+to as the target distribution, and $F(\mathbf{s})$ is the free energy
 surface. This functional can be shown to be convex and to have a minimum at:
-$$
-V(\mathbf{s}) = -F(\mathbf{s})-{\frac {1}{\beta}} \log {p_{\mathrm{tg}}(\mathbf{s})}.
-$$
-The last equation states that when we minimize the functional $ \Omega [V] $,
-we can obtain the free energy surface from the bias potential (and the target distribution)
-We can choose the target distribution $ p_{\mathrm{tg}}(\mathbf{s}) $ at will and it is
-the CV distribution that we obtain when minimizing $ \Omega [V] $.
 
-We put the variational principle to practice by expanding $ V(\mathbf{s}) $
+$$V(\mathbf{s}) = -F(\mathbf{s})-{\frac {1}{\beta}} \log {p_{\mathrm{tg}}(\mathbf{s})}.$$
+
+The last equation states that when we minimize the functional $\Omega [V]$,
+we can obtain the free energy surface from the bias potential (and the target distribution)
+We can choose the target distribution $p_{\mathrm{tg}}(\mathbf{s})$ at will and it is
+the CV distribution that we obtain when minimizing $\Omega [V]$.
+
+We put the variational principle to practice by expanding $V(\mathbf{s})$
 in some basis set:
-$$
-V(\mathbf{s}) = \sum\limits_{i} \alpha_i \, f_i(\mathbf{s}),
-$$
-where $ f_i(\mathbf{s}) $ are the basis functions and the $\boldsymbol\alpha $ are the coefficients in the expansion.
-We then need to find the coefficients $\boldsymbol\alpha $ that minimize $ \Omega
-[V] $. In principle one could use any optimization algorithm. In practice
+
+$$V(\mathbf{s}) = \sum\limits_{i} \alpha_i \ f_i(\mathbf{s}),$$
+
+where $f_i(\mathbf{s})$ are the basis functions and the $\boldsymbol\alpha$ are the coefficients in the expansion.
+
+We then need to find the coefficients $\boldsymbol\alpha$ that minimize $\Omega
+[V]$. In principle one could use any optimization algorithm. In practice
 the algorithm that has become the default choice for VES is the so-called
 averaged stochastic gradient descent algorithm \cite Bach-NIPS-2013.
-In this algorithm the $\boldsymbol\alpha $ are evolved iteratively
+In this algorithm the $\boldsymbol\alpha$ are evolved iteratively
 according to:
-$$
-\boldsymbol\alpha^{(n+1)} = \boldsymbol\alpha^{(n)}-\mu
+
+$$\boldsymbol\alpha^{(n+1)} = \boldsymbol\alpha^{(n)}-\mu
  \left[
 \nabla\Omega(\bar{\boldsymbol\alpha}^{(n)})+
 H(\bar{\boldsymbol\alpha}^{(n)})[\boldsymbol\alpha^{(n)}-\bar{\boldsymbol\alpha}^{(n)}]
-\right]
-$$
+\right]$$
+
 where $\mu$ is the step size,
-$\bar{\boldsymbol\alpha}^{(n)} $ is the running average of $\boldsymbol\alpha^{(n)} $ at iteration $ n $, and
-$\nabla\Omega(\bar{\boldsymbol\alpha}^{(n)}) $ and
-$H(\bar{\boldsymbol\alpha}^{(n)}) $
- are the gradient and Hessian of $ \Omega[V] $ evaluated at the running
-average at iteration $ n $, respectively.
+$\bar{\boldsymbol\alpha}^{(n)}$ is the running average of $\boldsymbol\alpha^{(n)}$ at iteration $n$, and
+$\nabla\Omega(\bar{\boldsymbol\alpha}^{(n)})$ and
+$H(\bar{\boldsymbol\alpha}^{(n)})$ are the gradient and Hessian of $\Omega[V]$ evaluated at the running
+average at iteration $n$, respectively.
 The behavior of the coefficients will become clear in the examples below.
 
-As said above, we can choose the target distribution $ p_{\mathrm{tg}}(\mathbf{s}) $ at will.
+As said above, we can choose the target distribution $p_{\mathrm{tg}}(\mathbf{s})$ at will.
 The most simple choice would be a uniform target distribution. However, it has found more optimal to
 employ the so-called well-tempered distribution \cite Valsson-JCTC-2015 :
-$$
-p_{\mathrm{tg}}(\mathbf{s}) =
+
+$$p_{\mathrm{tg}}(\mathbf{s}) =
 \frac{[ P(\mathbf{s}) ]^{1/\gamma}}
-{\int d\mathbf{s}\, [ P(\mathbf{s}) ]^{1/\gamma}}
-$$
-where $ \gamma $ is the so-called bias
-factor and $ P(\mathbf{s}) $ is the unbiased CV distribution. Therefore the
+{\int d\mathbf{s}\ [ P(\mathbf{s}) ]^{1/\gamma}}$$
+
+where $\gamma$ is the so-called bias
+factor and $P(\mathbf{s})$ is the unbiased CV distribution. Therefore the
 well-tempered distribution is the unbiased distribution with enhanced fluctuations
 and lowered barriers. This is the same distribution as sampled in well-tempered
 metadynamics. The advantages of this distribution are that the features of the
 FES (metastable states) are preserved and that the system is not forced to sample regions of high
 free energy (that can represent un-physical configurations)
 as it would if we had chosen the uniform target distribution.
+There is a caveat though, the well-tempered $p_{\mathrm{tg}}(\mathbf{s})$ depends on 
+$F(\mathbf{s})$ that is the function that we are trying to calculate.
+One way to approach this problem is to calculate $p_{\mathrm{tg}}(\mathbf{s})$
+self-consistently \cite Valsson-JCTC-2015, for instance at iteration $k$:
 
-There is a caveat though, the well-tempered $ p_{\mathrm{tg}}(\mathbf{s}) $ depends on $
-F(\mathbf{s})$ that is the function that we are trying to calculate.
-One way to approach this problem is to calculate $ p_{\mathrm{tg}}(\mathbf{s}) $
-self-consistently \cite Valsson-JCTC-2015, for instance at iteration $ k $:
-$$
-p^{(k+1)}(\mathbf{s})=\frac{e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}{\int d\mathbf{s} \, e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}
-$$
+$$p^{(k+1)}(\mathbf{s})=\frac{e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}{\int d\mathbf{s} \ e^{-(\beta/\gamma) F^{(k+1)}(\mathbf{s})}}$$
+
 where:
-$$
-F^{(k+1)}(\mathbf{s})=-V^{(k)}(\mathbf{s}) - \frac{1}{\beta} \log p^{(k)}(\mathbf{s})
-$$
-Normally $ p^{(0)}(\mathbf{s}) $ is taken to be uniform.
+
+$$F^{(k+1)}(\mathbf{s})=-V^{(k)}(\mathbf{s}) - \frac{1}{\beta} \log p^{(k)}(\mathbf{s})$$
+
+Normally $p^{(0)}(\mathbf{s})$ is taken to be uniform.
 Therefore the target distribution evolves in time until it becomes stationary
 when the simulation has converged. It has been shown that in some cases the
 convergence is faster using the well-tempered target distribution than using
-the uniform $ p(\mathbf{s}) $ \cite Valsson-JCTC-2015.
+the uniform $p(\mathbf{s})$ \cite Valsson-JCTC-2015.
 
 \section masterclass-22-11-system The system
 
