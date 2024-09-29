@@ -1,6 +1,8 @@
 # Masterclass 22.11: Variationally Enhanced Sampling
 
-This lesson was given as part of the PLUMED masterclass series in 2022.  It includes:
+This lesson was given as part of the PLUMED masterclass series in 2022.  
+
+It includes:
 
 * A video lecture that explain the theory covered (Lecture 1).
 * The lecture slides covered in Lecture 1. 
@@ -15,9 +17,10 @@ The flow chart shown below indicates the order in which you should consult the r
 flowchart TB;
   A[ref1] ==> B[Lecture I];
   A ==> C[Slides];
+  B ==> D[Instructions];
   C ==> D[Instructions];
   D ==> E[Lecture II];
-  E ==> F[Solution];
+  D ==> F[Solution];
   click A "ref1" "Instructions for how to install the version of PLUMED that you will need for this exercise";
   click B "video1" "A video lecture that was given on July 4st 2022 to cover the background behind Variationally Enhanced Sampling";
   click C "Slides/PLUMED-Masterclass-22-11-July4-2022.pdf" "The slides from the first video lecture";
